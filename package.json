@@ -1,0 +1,14 @@
+{
+  "name": "jobprotal",
+  "version": "1.0.0",
+  "description": "Jobportal application with 2 react app amd and 1 node app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "truffle": "^5.8.4"
+  }
+}
