@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script>
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+        }
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+        var propertyContract = new web3.eth.Contract([{"constant":false,"inputs":[{"internalType":"uint256","name":"_propertyid","type":"uint256"},{"internalType":"string","name":"_name","type":"string"},{"internalType":"string","name":"_owner","type":"string"},{"internalType":"uint256","name":"_value","type":"uint256"},{"internalType":"uint256","name":"_area","type":"uint256"}],"name":"addProperty","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"_propertyid","type":"uint256"},{"internalType":"string","name":"_newOwner","type":"string"}],"name":"transferPropertyOwnership","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"constant":true,"inputs":[],"name":"contractOwner","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"properties","outputs":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"owner","type":"string"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"area","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"uint256","name":"_propertyid","type":"uint256"}],"name":"queryPropertyById","outputs":[{"internalType":"string","name":"name","type":"string"},{"internalType":"string","name":"owner","type":"string"},{"internalType":"uint256","name":"area","type":"uint256"},{"internalType":"uint256","name":"value","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}],'0xB8Ebd7fc4750C3f6C23778291A83ba128748a8a5');
+
+        function addProperty() {
+            propertyContract.methods.addProperty($("#PropertyId").val(), $("#PropertyName").val(), $("#PropertyOwner").val(), $("#PropertyValue").val(), $("#PropertyArea").val()).send(
+                {
+                    from: '0x05Eb1Ed44Ee20BF405433DB228194C07f9b741df', gas: 107035
+                }).on('transactionHash', function (hash) {
+                    document.getElementById("AddPropertyResult").innerHTML = "Transaction hash is " + hash
+                })
+        }
+
+        function queryPropertyById() {
+            propertyContract.methods.queryPropertyById($("#QueryPropertyId").val()).call().then(function (result) {
+                document.getElementById("PropertyDetails").innerHTML = "Property Name is " + result[0] + " and Owner is " + result[1]
+            })
+        }
+
+        function transferProperty() {
+            propertyContract.methods.transferPropertyOwnership($("#TransferPropertyId").val(), $("#NewOwner").val()).send(
+                { from: '0x05Eb1Ed44Ee20BF405433DB228194C07f9b741df', gas: 107035 }).on('transactionHash', function (hash) {
+                    document.getElementById("TransferPropertyResult").innerHTML = "Transaction hash is " + hash
+                })
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Property Transfer App</h1>
+        </p>
+        <h2 id="instructor"></h2>
+        <table>
+            <tr>
+                <td>
+                    <label for="Id" class="col-lg-2 control-label">Property Id</label>
+                </td>
+                <td>
+                    <label for="name" class="col-lg-2 control-label">Property Name</label>
+                </td>
+                <td>
+                    <label for="owner" class="col-lg-2 control-label">Property Owner</label>
+                </td>
+                <td>
+                    <label for="value" class="col-lg-2 control-label">Property Value</label>
+                </td>
+                <td>
+                    <label for="area" class="col-lg-2 control-label">Property Area</label>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="PropertyId" type="text">
+                </td>
+                <td>
+                    <input id="PropertyName" type="text">
+                </td>
+                <td>
+                    <input id="PropertyOwner" type="text">
+                </td>
+                <td>
+                    <input id="PropertyValue" type="text">
+                </td>
+                <td>
+                    <input id="PropertyArea" type="text">
+                </td>
+                <td>
+                    <button id="button" onclick="addProperty()">Add New Property</button>
+                </td>
+            </tr>
+        </table>
+        </br>
+        <textarea id="AddPropertyResult" style="border:none;width:400px;"></textarea>
+        <h2 id="instructor"></h2>
+        <label for="area" class="col-lg-2 control-label">Property Id</label>
+        <input id="QueryPropertyId" type="text">
+        <button id="queryPropertyById" onclick="queryPropertyById()">Query Property</button>
+        </br>
+        <textarea id="PropertyDetails" style="border:black;width:1000px;"></textarea>
+        </br>
+        </br>
+        </br>
+        <h2 id="instructor"></h2>
+        <label for="area" class="col-lg-2 control-label">Property Id</label>
+        <input id="TransferPropertyId" type="text">
+        <label for="area" class="col-lg-2 control-label">New Owner</label>
+        <input id="NewOwner" type="text">
+        <button id="TransferPropertyOwnership" onclick="transferProperty()">Transfer Ownership</button>
+        </br>
+        <textarea id="TransferPropertyResult" style="border:none;width:400px;"></textarea>
+    </div>
+</body>
+
+</html>

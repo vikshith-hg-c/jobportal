@@ -1,0 +1,14 @@
+{
+  "name": "jobportal",
+  "version": "1.0.0",
+  "description": "webpage for accessing smartcontract",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Vikshith H G",
+  "license": "ISC",
+  "dependencies": {
+    "web3": "^1.9.0"
+  }
+}
